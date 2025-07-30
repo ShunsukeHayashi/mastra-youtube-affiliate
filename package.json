@@ -3,10 +3,13 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "mastra dev",
-    "build": "mastra build",
-    "start": "mastra start"
+    "test": "NODE_OPTIONS='--experimental-vm-modules' jest",
+    "test:watch": "NODE_OPTIONS='--experimental-vm-modules' jest --watch",
+    "test:coverage": "NODE_OPTIONS='--experimental-vm-modules' jest --coverage",
+    "test:ci": "NODE_OPTIONS='--experimental-vm-modules' jest --ci --coverage --maxWorkers=2",
+    "dev": "NODE_OPTIONS='--no-deprecation' mastra dev",
+    "build": "NODE_OPTIONS='--no-deprecation' mastra build",
+    "start": "NODE_OPTIONS='--no-deprecation' mastra start"
   },
   "keywords": [],
   "author": "",
@@ -28,8 +31,12 @@
     "zod": "^3.25.76"
   },
   "devDependencies": {
+    "@jest/globals": "^29.7.0",
+    "@types/jest": "^30.0.0",
     "@types/node": "^24.1.0",
+    "jest": "^29.7.0",
     "mastra": "^0.10.16",
+    "ts-jest": "^29.4.0",
     "typescript": "^5.8.3"
   }
 }

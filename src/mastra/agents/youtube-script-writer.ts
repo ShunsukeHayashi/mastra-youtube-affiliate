@@ -38,7 +38,7 @@ export const youtubeScriptWriterAgent = new Agent({
   - 感情表現を豊かに
 
   常に視聴維持率を意識し、飽きさせない展開を心がけてください。`,
-  model: google('gemini-2.0-flash-exp'),
+  model: google('gemini-2.5-pro'),
   tools: {
     scriptStructureGenerator: scriptStructureGeneratorTool,
     hookGenerator: hookGeneratorTool,

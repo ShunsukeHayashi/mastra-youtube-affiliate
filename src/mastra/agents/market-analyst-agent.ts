@@ -26,7 +26,7 @@ export const marketAnalystAgent = new Agent({
 特に七里信一ChatGPTセミナーなどの高単価商材については、
 詳細な市場ポジショニングと収益ポテンシャルを分析します。
 `,
-  model: google('gemini-2.0-flash-exp'),
+  model: google('gemini-2.5-pro'),
   tools: {
     competitorAnalysisTool,
     productAnalysisTool,

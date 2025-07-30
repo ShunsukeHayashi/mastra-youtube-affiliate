@@ -22,7 +22,7 @@ export const youtubeChannelAnalysisAgent = new Agent({
   - Provide specific, actionable recommendations
   
   Always base your analysis on data and provide clear reasoning for your recommendations.`,
-  model: google('gemini-2.0-flash-exp'),
+  model: google('gemini-2.5-pro'),
   tools: {
     youtubeAnalytics: youtubeAnalyticsTool,
   },

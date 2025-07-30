@@ -29,7 +29,7 @@ export const youtubeMarketingAgent = new Agent({
   - モバイルでも見やすいデザイン
 
   常にデータドリブンなアプローチで、視聴者の心理を理解した提案を行ってください。`,
-  model: google('gemini-2.0-flash-exp'),
+  model: google('gemini-2.5-pro'),
   tools: {
     thumbnailGenerator: youtubeThumbnailGeneratorTool,
     titleGenerator: youtubeTitleGeneratorTool,

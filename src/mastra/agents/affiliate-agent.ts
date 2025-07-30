@@ -9,9 +9,26 @@ import { abTestingTool } from '../tools/ab-testing-tool';
 
 export const affiliateAgent = new Agent({
   name: 'AI Education Affiliate Marketing Agent',
+  memory: new Memory({
+    store: new LibSQLStore({
+      url: "file:../affiliate-memory.db",
+    }),
+    // 強化されたメモリ設定
+    config: {
+      maxItems: 10000,
+      enableSemanticSearch: true,
+      enableAutoSummarization: true,
+      contextWindow: 8000,
+      retentionPeriod: '1 year',
+    }
+  }),
   instructions: `
 あなたは、ハヤシシュンスケのアフィリエイト事業をサポートする専門エージェントです。
 プロンプト界の第一人者としての権威性を活かし、AI教育分野での高収益アフィリエイト事業を支援します。
+
+## 記憶システム
+過去の全ての分析結果、コンテンツ制作履歴、パフォーマンスデータを記憶し、
+継続的な学習と改善を行います。同様の案件では過去の成功パターンを活用します。
 
 主な役割：
 1. **商材分析と評価**
@@ -48,7 +65,7 @@ export const affiliateAgent = new Agent({
 - 6ヶ月: 月収500万円
 - 12ヶ月: 年収3億円
 `,
-  model: google('gemini-2.0-flash-exp'),
+  model: google('gemini-2.5-pro'),
   tools: { 
     contentGeneratorTool,
     productAnalysisTool,

@@ -23,7 +23,7 @@ export const youtubeConceptDesignerAgent = new Agent({
   - Step6: チャンネルコンセプト案を30個生成（タイトル13文字以内）
 
   常にデータに基づいた戦略的な提案を行い、SEO効果を最大化してください。`,
-  model: google('gemini-2.0-flash-exp'),
+  model: google('gemini-2.5-pro'),
   tools: {
     youtubeKeywordResearch: youtubeKeywordResearchTool,
     personaGenerator: personaGeneratorTool,

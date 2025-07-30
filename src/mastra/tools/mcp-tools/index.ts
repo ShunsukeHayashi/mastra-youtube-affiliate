@@ -7,6 +7,11 @@ import { larkGenesisTool } from './lark-genesis-tool';
 import { gasInterpreterTool } from './gas-interpreter-tool';
 import { difyWorkflowTool } from './dify-workflow-tool';
 
+// Gemini API Tools Import
+import { geminiSearchTool } from '../gemini-search-tool';
+import { geminiCodeExecutionTool } from '../gemini-code-execution-tool';
+import { geminiImageGenerationTool } from '../gemini-image-generation-tool';
+
 // MCP Tools Export
 export { ideDiagnosticsTool } from './ide-diagnostics-tool';
 export { jupyterExecutionTool } from './jupyter-execution-tool';
@@ -15,6 +20,11 @@ export { larkDocsTool } from './lark-docs-tool';
 export { larkGenesisTool } from './lark-genesis-tool';
 export { gasInterpreterTool } from './gas-interpreter-tool';
 export { difyWorkflowTool } from './dify-workflow-tool';
+
+// Gemini API Tools Export
+export { geminiSearchTool } from '../gemini-search-tool';
+export { geminiCodeExecutionTool } from '../gemini-code-execution-tool';
+export { geminiImageGenerationTool } from '../gemini-image-generation-tool';
 
 // MCP Tool Registry
 export const mcpTools = {
@@ -27,8 +37,23 @@ export const mcpTools = {
   'dify-workflow': difyWorkflowTool,
 } as const;
 
+// Gemini API Tool Registry
+export const geminiTools = {
+  'gemini-search': geminiSearchTool,
+  'gemini-code-execution': geminiCodeExecutionTool,
+  'gemini-image-generation': geminiImageGenerationTool,
+} as const;
+
+// Combined Tool Registry
+export const allTools = {
+  ...mcpTools,
+  ...geminiTools,
+} as const;
+
 // MCP Tool Types
 export type MCPToolName = keyof typeof mcpTools;
+export type GeminiToolName = keyof typeof geminiTools;
+export type AllToolName = keyof typeof allTools;
 
 // MCP Tool Descriptions
 export const mcpToolDescriptions = {
@@ -39,4 +64,17 @@ export const mcpToolDescriptions = {
   'lark-genesis': 'Genesis AIで高度なコンテンツ生成',
   'gas-interpreter': 'Google Apps Scriptで自動化',
   'dify-workflow': 'Difyワークフローの自動生成と管理',
+} as const;
+
+// Gemini Tool Descriptions
+export const geminiToolDescriptions = {
+  'gemini-search': 'Google検索でリアルタイム情報を取得し、回答を強化',
+  'gemini-code-execution': 'Pythonコードを実行し、データ分析と可視化を実行',
+  'gemini-image-generation': 'Imagenでテキストから高品質な画像を生成',
+} as const;
+
+// All Tool Descriptions
+export const allToolDescriptions = {
+  ...mcpToolDescriptions,
+  ...geminiToolDescriptions,
 } as const;
