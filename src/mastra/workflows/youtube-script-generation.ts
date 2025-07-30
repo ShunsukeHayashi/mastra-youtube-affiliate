@@ -280,17 +280,32 @@ CTA: ${callToAction}`,
 // ワークフロー定義
 export const youtubeScriptGenerationWorkflow = createWorkflow({
   id: 'youtube-script-generation',
-  triggerSchema: z.object({
+  inputSchema: z.object({
     videoTitle: z.string(),
     videoType: z.enum(['long', 'shorts']),
     targetAudience: z.string(),
     mainMessage: z.string(),
     callToAction: z.string(),
   }),
-  steps: [
-    planContentStep,
-    generateHookStep,
-    generateStructureStep,
-    generateFullScriptStep,
-  ],
-});
+  outputSchema: z.object({
+    fullScript: z.object({
+      title: z.string(),
+      totalDuration: z.number(),
+      sections: z.array(z.object({
+        sectionName: z.string(),
+        duration: z.number(),
+        script: z.string(),
+        visualCues: z.array(z.string()),
+        transitions: z.string(),
+      })),
+      keywords: z.array(z.string()),
+      hashtags: z.array(z.string()),
+    }),
+  }),
+})
+  .then(planContentStep)
+  .then(generateHookStep)
+  .then(generateStructureStep)
+  .then(generateFullScriptStep);
+
+youtubeScriptGenerationWorkflow.commit();

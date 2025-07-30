@@ -171,16 +171,24 @@ const generateConceptsStep = createStep({
 // ワークフロー定義
 export const youtubeConceptDesignWorkflow = createWorkflow({
   id: 'youtube-concept-design',
-  triggerSchema: z.object({
+  inputSchema: z.object({
     businessName: z.string(),
     serviceUrl: z.string().optional(),
     productDescription: z.string(),
     targetConceptCount: z.number().default(30),
   }),
-  steps: [
-    collectProductInfoStep,
-    researchKeywordsStep,
-    generatePersonasStep,
-    generateConceptsStep,
-  ],
-});
+  outputSchema: z.object({
+    concepts: z.array(z.object({
+      title: z.string(),
+      description: z.string(),
+      targetKeywords: z.array(z.string()),
+      targetPersona: z.string(),
+    })),
+  }),
+})
+  .then(collectProductInfoStep)
+  .then(researchKeywordsStep)
+  .then(generatePersonasStep)
+  .then(generateConceptsStep);
+
+youtubeConceptDesignWorkflow.commit();

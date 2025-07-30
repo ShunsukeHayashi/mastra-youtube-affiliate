@@ -201,17 +201,29 @@ const proposeABTestStep = createStep({
 // ワークフロー定義
 export const youtubeMarketingSupportWorkflow = createWorkflow({
   id: 'youtube-marketing-support',
-  triggerSchema: z.object({
+  inputSchema: z.object({
     videoTopic: z.string(),
     videoDescription: z.string(),
     targetAudience: z.string(),
     competitorTitles: z.array(z.string()).optional(),
     selectedTitleIndex: z.number().default(0),
   }),
-  steps: [
-    analyzeContentStep,
-    generateTitlesStep,
-    generateThumbnailsStep,
-    proposeABTestStep,
-  ],
-});
+  outputSchema: z.object({
+    abTestStrategy: z.object({
+      testDuration: z.string(),
+      variants: z.array(z.object({
+        variantId: z.string(),
+        title: z.string(),
+        thumbnailId: z.string(),
+        hypothesis: z.string(),
+      })),
+      successMetrics: z.array(z.string()),
+    }),
+  }),
+})
+  .then(analyzeContentStep)
+  .then(generateTitlesStep)
+  .then(generateThumbnailsStep)
+  .then(proposeABTestStep);
+
+youtubeMarketingSupportWorkflow.commit();
