@@ -14,8 +14,12 @@ const fetchChannelDataStep = createStep({
     channelData: z.any(),
     videos: z.array(z.any()),
   }),
-  execute: async ({ context }) => {
-    const { channelId, analysisDepth } = context;
+  execute: async ({ getInitData }) => {
+    const triggerData = getInitData();
+    if (!triggerData) {
+      throw new Error('Trigger data not found');
+    }
+    const { channelId, analysisDepth } = triggerData;
 
     // Use the agent to fetch data
     const result = await youtubeChannelAnalysisAgent.generate([{
@@ -47,8 +51,12 @@ const analyzePerformanceStep = createStep({
       averageViews: z.number(),
     }),
   }),
-  execute: async ({ context }) => {
-    const { channelData, videos } = context;
+  execute: async ({ getStepResult }) => {
+    const fetchResult = getStepResult(fetchChannelDataStep);
+    if (!fetchResult) {
+      throw new Error('Fetch result not found');
+    }
+    const { channelData, videos } = fetchResult;
 
     const result = await youtubeChannelAnalysisAgent.generate([{
       role: 'user',
@@ -79,8 +87,12 @@ const generateRecommendationsStep = createStep({
     recommendations: z.array(z.string()),
     competitiveInsights: z.string().optional(),
   }),
-  execute: async ({ context }) => {
-    const { performanceAnalysis, metrics } = context;
+  execute: async ({ getStepResult }) => {
+    const performanceResult = getStepResult(analyzePerformanceStep);
+    if (!performanceResult) {
+      throw new Error('Performance result not found');
+    }
+    const { performanceAnalysis, metrics } = performanceResult;
 
     const result = await youtubeChannelAnalysisAgent.generate([{
       role: 'user',

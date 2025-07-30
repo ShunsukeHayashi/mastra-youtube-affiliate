@@ -20,8 +20,12 @@ const analyzeContentStep = createStep({
       competitiveInsights: z.string().optional(),
     }),
   }),
-  execute: async ({ context }) => {
-    const { videoTopic, videoDescription, targetAudience, competitorTitles } = context;
+  execute: async ({ getInitData }) => {
+    const triggerData = getInitData();
+    if (!triggerData) {
+      throw new Error('Trigger data not found');
+    }
+    const { videoTopic, videoDescription, targetAudience, competitorTitles } = triggerData;
     
     const result = await youtubeMarketingAgent.generate([{
       role: 'user',
@@ -62,8 +66,12 @@ const generateTitlesStep = createStep({
       expectedCTR: z.string(),
     })),
   }),
-  execute: async ({ context }) => {
-    const { contentAnalysis } = context;
+  execute: async ({ getStepResult }) => {
+    const analysisResult = getStepResult(analyzeContentStep);
+    if (!analysisResult) {
+      throw new Error('Analysis result not found');
+    }
+    const { contentAnalysis } = analysisResult;
     
     const result = await youtubeMarketingAgent.generate([{
       role: 'user',
@@ -104,8 +112,16 @@ const generateThumbnailsStep = createStep({
       colorScheme: z.string(),
     })),
   }),
-  execute: async ({ context }) => {
-    const { contentAnalysis, selectedTitle } = context;
+  execute: async ({ getInitData, getStepResult }) => {
+    const analysisResult = getStepResult(analyzeContentStep);
+    const triggerData = getInitData();
+    if (!analysisResult || !triggerData) {
+      throw new Error('Required data not found');
+    }
+    const { contentAnalysis } = analysisResult;
+    const { selectedTitleIndex } = triggerData;
+    const titlesResult = getStepResult(generateTitlesStep);
+    const selectedTitle = titlesResult?.titles[selectedTitleIndex || 0]?.title || 'デフォルトタイトル';
     
     const result = await youtubeMarketingAgent.generate([{
       role: 'user',
@@ -172,8 +188,14 @@ const proposeABTestStep = createStep({
       successMetrics: z.array(z.string()),
     }),
   }),
-  execute: async ({ context }) => {
-    const { titles, thumbnails } = context;
+  execute: async ({ getStepResult }) => {
+    const titlesResult = getStepResult(generateTitlesStep);
+    const thumbnailsResult = getStepResult(generateThumbnailsStep);
+    if (!titlesResult || !thumbnailsResult) {
+      throw new Error('Required data not found');
+    }
+    const { titles } = titlesResult;
+    const { thumbnails } = thumbnailsResult;
     
     return {
       abTestStrategy: {

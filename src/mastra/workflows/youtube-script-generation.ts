@@ -35,8 +35,12 @@ const planContentStep = createStep({
       keyTakeaways: z.array(z.string()),
     }),
   }),
-  execute: async ({ context }) => {
-    const { videoTitle, videoType, scriptStyle, targetAudience, mainMessage } = context;
+  execute: async ({ getInitData }) => {
+    const triggerData = getInitData();
+    if (!triggerData) {
+      throw new Error('Trigger data not found');
+    }
+    const { videoTitle, videoType, scriptStyle, targetAudience, mainMessage } = triggerData;
     
     const result = await youtubeScriptWriterAgent.generate([{
       role: 'user',
@@ -90,8 +94,12 @@ const generateHookStep = createStep({
     })),
     selectedHook: z.string(),
   }),
-  execute: async ({ context }) => {
-    const { contentPlan } = context;
+  execute: async ({ getStepResult }) => {
+    const planResult = getStepResult(planContentStep);
+    if (!planResult) {
+      throw new Error('Content plan not found');
+    }
+    const { contentPlan } = planResult;
     
     const result = await youtubeScriptWriterAgent.generate([{
       role: 'user',
@@ -146,8 +154,14 @@ const generateStructureStep = createStep({
       speakingNotes: z.string(),
     })),
   }),
-  execute: async ({ context }) => {
-    const { contentPlan, selectedHook } = context;
+  execute: async ({ getStepResult }) => {
+    const planResult = getStepResult(planContentStep);
+    const hookResult = getStepResult(generateHookStep);
+    if (!planResult || !hookResult) {
+      throw new Error('Required data not found');
+    }
+    const { contentPlan } = planResult;
+    const { selectedHook } = hookResult;
     
     const styleInfo = contentPlan.scriptStyle ? `
 スタイル: ${contentPlan.scriptStyle}` : '';
@@ -265,8 +279,16 @@ const generateFullScriptStep = createStep({
       hashtags: z.array(z.string()),
     }),
   }),
-  execute: async ({ context }) => {
-    const { contentPlan, scriptStructure, callToAction } = context;
+  execute: async ({ getInitData, getStepResult }) => {
+    const triggerData = getInitData();
+    const planResult = getStepResult(planContentStep);
+    const structureResult = getStepResult(generateStructureStep);
+    if (!triggerData || !planResult || !structureResult) {
+      throw new Error('Required data not found');
+    }
+    const { callToAction } = triggerData;
+    const { contentPlan } = planResult;
+    const { scriptStructure } = structureResult;
     
     const result = await youtubeScriptWriterAgent.generate([{
       role: 'user',

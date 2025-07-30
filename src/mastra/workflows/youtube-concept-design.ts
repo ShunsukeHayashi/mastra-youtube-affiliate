@@ -14,8 +14,12 @@ const collectProductInfoStep = createStep({
   outputSchema: z.object({
     productInfo: z.string(),
   }),
-  execute: async ({ context }) => {
-    const { businessName, serviceUrl, productDescription } = context;
+  execute: async ({ getInitData }) => {
+    const triggerData = getInitData();
+    if (!triggerData) {
+      throw new Error('Trigger data not found');
+    }
+    const { businessName, serviceUrl, productDescription } = triggerData;
     
     let productInfo = `事業者名: ${businessName}\n`;
     if (serviceUrl) {
@@ -40,8 +44,12 @@ const researchKeywordsStep = createStep({
       searchVolume: z.number(),
     })),
   }),
-  execute: async ({ context }) => {
-    const { productInfo } = context;
+  execute: async ({ getStepResult }) => {
+    const productResult = getStepResult(collectProductInfoStep);
+    if (!productResult) {
+      throw new Error('Product info not found');
+    }
+    const { productInfo } = productResult;
     
     const result = await youtubeConceptDesignerAgent.generate([{
       role: 'user',
@@ -76,8 +84,12 @@ const generatePersonasStep = createStep({
       goals: z.array(z.string()),
     })),
   }),
-  execute: async ({ context }) => {
-    const { topKeywords } = context;
+  execute: async ({ getStepResult }) => {
+    const keywordResult = getStepResult(researchKeywordsStep);
+    if (!keywordResult) {
+      throw new Error('Keywords not found');
+    }
+    const { topKeywords } = keywordResult;
     const top3Keywords = topKeywords.slice(0, 3).map(k => k.keyword);
     
     const result = await youtubeConceptDesignerAgent.generate([{
@@ -131,8 +143,14 @@ const generateConceptsStep = createStep({
       targetPersona: z.string(),
     })),
   }),
-  execute: async ({ context }) => {
-    const { topKeywords, selectedPersonas } = context;
+  execute: async ({ getStepResult }) => {
+    const keywordResult = getStepResult(researchKeywordsStep);
+    const personaResult = getStepResult(generatePersonasStep);
+    if (!keywordResult || !personaResult) {
+      throw new Error('Required data not found');
+    }
+    const { topKeywords } = keywordResult;
+    const { selectedPersonas } = personaResult;
     
     const result = await youtubeConceptDesignerAgent.generate([{
       role: 'user',
