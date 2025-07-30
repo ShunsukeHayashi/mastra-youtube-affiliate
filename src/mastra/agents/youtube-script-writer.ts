@@ -4,6 +4,8 @@ import { Memory } from '@mastra/memory';
 import { LibSQLStore } from '@mastra/libsql';
 import { scriptStructureGeneratorTool } from '../tools/script-structure-generator.js';
 import { hookGeneratorTool } from '../tools/hook-generator.js';
+import { scriptStyleSelectorTool } from '../tools/script-style-selector.js';
+import { advancedScriptStylesTool } from '../tools/advanced-script-styles.js';
 
 export const youtubeScriptWriterAgent = new Agent({
   name: 'YouTube Script Writer Agent',
@@ -40,6 +42,8 @@ export const youtubeScriptWriterAgent = new Agent({
   tools: {
     scriptStructureGenerator: scriptStructureGeneratorTool,
     hookGenerator: hookGeneratorTool,
+    scriptStyleSelector: scriptStyleSelectorTool,
+    advancedScriptStyles: advancedScriptStylesTool,
   },
   memory: new Memory({
     storage: new LibSQLStore({

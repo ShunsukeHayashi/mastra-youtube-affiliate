@@ -9,6 +9,19 @@ const planContentStep = createStep({
   inputSchema: z.object({
     videoTitle: z.string(),
     videoType: z.enum(['long', 'shorts']),
+    scriptStyle: z.enum([
+      'educational',
+      'entertainment',
+      'how-to',
+      'news',
+      'review',
+      'vlog',
+      'taiki',
+      'roadmap',
+      'osaru',
+      'moezo',
+      'dialogue',
+    ]).optional(),
     targetAudience: z.string(),
     mainMessage: z.string(),
     callToAction: z.string(),
@@ -23,7 +36,7 @@ const planContentStep = createStep({
     }),
   }),
   execute: async ({ context }) => {
-    const { videoTitle, videoType, targetAudience, mainMessage } = context;
+    const { videoTitle, videoType, scriptStyle, targetAudience, mainMessage } = context;
     
     const result = await youtubeScriptWriterAgent.generate([{
       role: 'user',
@@ -50,6 +63,7 @@ const planContentStep = createStep({
           '具体的な成果が期待できる',
           '継続的な学習への動機付け',
         ],
+        scriptStyle: scriptStyle || (videoType === 'long' ? 'educational' : undefined),
       },
     };
   },
@@ -120,6 +134,7 @@ const generateStructureStep = createStep({
       targetDuration: z.number(),
       tone: z.string(),
       keyTakeaways: z.array(z.string()),
+      scriptStyle: z.string().optional(),
     }),
     selectedHook: z.string(),
   }),
@@ -134,12 +149,15 @@ const generateStructureStep = createStep({
   execute: async ({ context }) => {
     const { contentPlan, selectedHook } = context;
     
+    const styleInfo = contentPlan.scriptStyle ? `
+スタイル: ${contentPlan.scriptStyle}` : '';
+    
     const result = await youtubeScriptWriterAgent.generate([{
       role: 'user',
       content: `以下の情報で台本構成を作成してください：
 トピック: ${contentPlan.topic}
 フック: ${selectedHook}
-時間: ${contentPlan.targetDuration}秒`,
+時間: ${contentPlan.targetDuration}秒${styleInfo}`,
     }]);
     
     if (contentPlan.targetDuration > 300) {
@@ -283,6 +301,19 @@ export const youtubeScriptGenerationWorkflow = createWorkflow({
   inputSchema: z.object({
     videoTitle: z.string(),
     videoType: z.enum(['long', 'shorts']),
+    scriptStyle: z.enum([
+      'educational',
+      'entertainment',
+      'how-to',
+      'news',
+      'review',
+      'vlog',
+      'taiki',
+      'roadmap',
+      'osaru',
+      'moezo',
+      'dialogue',
+    ]).optional().describe('台本スタイル（長尺動画のみ）'),
     targetAudience: z.string(),
     mainMessage: z.string(),
     callToAction: z.string(),
