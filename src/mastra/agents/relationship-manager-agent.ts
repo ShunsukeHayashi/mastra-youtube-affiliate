@@ -31,7 +31,7 @@ export const relationshipManagerAgent = new Agent({
 - 3ヶ月以内に主要3社との特別契約締結
 - 標準報酬の1.5倍以上の条件獲得
 `,
-  model: google('gemini-2.5-pro'),
+  model: google('gemini-2.0-flash-exp'),
   memory: new Memory({
     storage: new LibSQLStore({
       url: 'file:../relationship-manager.db',

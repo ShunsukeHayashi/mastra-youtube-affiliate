@@ -27,7 +27,7 @@ export const optimizationSpecialistAgent = new Agent({
 - 月次収益成長率20%
 - ROI 500%以上
 `,
-  model: google('gemini-2.5-pro'),
+  model: google('gemini-2.0-flash-exp'),
   tools: {
     abTestingTool,
   },

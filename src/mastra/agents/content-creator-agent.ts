@@ -27,7 +27,7 @@ export const contentCreatorAgent = new Agent({
 - CVR 15%以上
 - 読了率 80%以上
 `,
-  model: google('gemini-2.5-pro'),
+  model: google('gemini-2.0-flash-exp'),
   tools: {
     contentGeneratorTool,
   },

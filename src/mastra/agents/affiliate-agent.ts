@@ -48,7 +48,7 @@ export const affiliateAgent = new Agent({
 - 6ヶ月: 月収500万円
 - 12ヶ月: 年収3億円
 `,
-  model: google('gemini-2.5-pro'),
+  model: google('gemini-2.0-flash-exp'),
   tools: { 
     contentGeneratorTool,
     productAnalysisTool,
