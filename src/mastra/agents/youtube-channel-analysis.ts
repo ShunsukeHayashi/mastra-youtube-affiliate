@@ -1,5 +1,7 @@
 import { Agent } from '@mastra/core/agent';
 import { google } from '@ai-sdk/google';
+import { Memory } from '@mastra/memory';
+import { LibSQLStore } from '@mastra/libsql';
 import { youtubeAnalyticsTool } from '../tools/youtube-analytics.js';
 
 export const youtubeChannelAnalysisAgent = new Agent({
@@ -24,4 +26,9 @@ export const youtubeChannelAnalysisAgent = new Agent({
   tools: {
     youtubeAnalytics: youtubeAnalyticsTool,
   },
+  memory: new Memory({
+    storage: new LibSQLStore({
+      url: 'file:../mastra.db',
+    }),
+  }),
 });

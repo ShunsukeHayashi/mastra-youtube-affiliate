@@ -200,7 +200,7 @@ const proposeABTestStep = createStep({
 
 // ワークフロー定義
 export const youtubeMarketingSupportWorkflow = createWorkflow({
-  name: 'youtube-marketing-support',
+  id: 'youtube-marketing-support',
   triggerSchema: z.object({
     videoTopic: z.string(),
     videoDescription: z.string(),

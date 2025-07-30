@@ -1,5 +1,7 @@
 import { Agent } from '@mastra/core/agent';
 import { google } from '@ai-sdk/google';
+import { Memory } from '@mastra/memory';
+import { LibSQLStore } from '@mastra/libsql';
 import { youtubeThumbnailGeneratorTool } from '../tools/youtube-thumbnail-generator.js';
 import { youtubeTitleGeneratorTool } from '../tools/youtube-title-generator.js';
 
@@ -32,4 +34,9 @@ export const youtubeMarketingAgent = new Agent({
     thumbnailGenerator: youtubeThumbnailGeneratorTool,
     titleGenerator: youtubeTitleGeneratorTool,
   },
+  memory: new Memory({
+    storage: new LibSQLStore({
+      url: 'file:../mastra.db',
+    }),
+  }),
 });

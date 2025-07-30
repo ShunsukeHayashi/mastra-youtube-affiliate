@@ -170,7 +170,7 @@ const generateConceptsStep = createStep({
 
 // ワークフロー定義
 export const youtubeConceptDesignWorkflow = createWorkflow({
-  name: 'youtube-concept-design',
+  id: 'youtube-concept-design',
   triggerSchema: z.object({
     businessName: z.string(),
     serviceUrl: z.string().optional(),

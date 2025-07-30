@@ -1,5 +1,7 @@
 import { Agent } from '@mastra/core/agent';
 import { google } from '@ai-sdk/google';
+import { Memory } from '@mastra/memory';
+import { LibSQLStore } from '@mastra/libsql';
 import { youtubeKeywordResearchTool } from '../tools/youtube-keyword-research.js';
 import { personaGeneratorTool } from '../tools/persona-generator.js';
 
@@ -26,4 +28,9 @@ export const youtubeConceptDesignerAgent = new Agent({
     youtubeKeywordResearch: youtubeKeywordResearchTool,
     personaGenerator: personaGeneratorTool,
   },
+  memory: new Memory({
+    storage: new LibSQLStore({
+      url: 'file:../mastra.db',
+    }),
+  }),
 });

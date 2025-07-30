@@ -1,5 +1,7 @@
 import { Agent } from '@mastra/core/agent';
 import { google } from '@ai-sdk/google';
+import { Memory } from '@mastra/memory';
+import { LibSQLStore } from '@mastra/libsql';
 import { scriptStructureGeneratorTool } from '../tools/script-structure-generator.js';
 import { hookGeneratorTool } from '../tools/hook-generator.js';
 
@@ -39,4 +41,9 @@ export const youtubeScriptWriterAgent = new Agent({
     scriptStructureGenerator: scriptStructureGeneratorTool,
     hookGenerator: hookGeneratorTool,
   },
+  memory: new Memory({
+    storage: new LibSQLStore({
+      url: 'file:../mastra.db',
+    }),
+  }),
 });

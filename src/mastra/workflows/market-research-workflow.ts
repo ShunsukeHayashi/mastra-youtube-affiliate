@@ -283,7 +283,7 @@ const planContent = createStep({
 
 // ワークフローの定義
 const marketResearchWorkflow = createWorkflow({
-  id: 'market-research-workflow',
+  id: 'market-research',
   inputSchema: z.object({
     focusProduct: z.string().describe('メインで推薦したい商品（例：七里信一ChatGPTセミナー）'),
   }),

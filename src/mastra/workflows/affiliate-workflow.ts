@@ -225,7 +225,7 @@ const optimizationSuggestions = createStep({
 
 // ワークフローの定義
 const affiliateWorkflow = createWorkflow({
-  id: 'affiliate-content-workflow',
+  id: 'affiliate-workflow',
   inputSchema: z.object({
     productName: z.string().describe('推薦する商品・サービス名'),
   }),

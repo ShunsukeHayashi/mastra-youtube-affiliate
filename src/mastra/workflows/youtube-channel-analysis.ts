@@ -100,15 +100,25 @@ const generateRecommendationsStep = createStep({
 
 // Create the workflow
 export const youtubeChannelAnalysisWorkflow = createWorkflow({
-  name: 'youtube-channel-analysis',
-  triggerSchema: z.object({
+  id: 'youtube-channel-analysis',
+  inputSchema: z.object({
     channelId: z.string(),
     analysisDepth: z.enum(['basic', 'detailed', 'comprehensive']).default('detailed'),
     competitorChannels: z.array(z.string()).optional(),
   }),
-  steps: [
-    fetchChannelDataStep,
-    analyzePerformanceStep,
-    generateRecommendationsStep,
-  ],
-});
+  outputSchema: z.object({
+    recommendations: z.array(z.string()),
+    competitiveInsights: z.string().optional(),
+    metrics: z.object({
+      subscribers: z.number(),
+      totalViews: z.number(),
+      videoCount: z.number(),
+      averageViews: z.number(),
+    }),
+  }),
+})
+  .then(fetchChannelDataStep)
+  .then(analyzePerformanceStep)
+  .then(generateRecommendationsStep);
+
+youtubeChannelAnalysisWorkflow.commit();

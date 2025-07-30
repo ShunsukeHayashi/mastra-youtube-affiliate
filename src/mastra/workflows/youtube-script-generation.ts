@@ -279,7 +279,7 @@ CTA: ${callToAction}`,
 
 // ワークフロー定義
 export const youtubeScriptGenerationWorkflow = createWorkflow({
-  name: 'youtube-script-generation',
+  id: 'youtube-script-generation',
   triggerSchema: z.object({
     videoTitle: z.string(),
     videoType: z.enum(['long', 'shorts']),
