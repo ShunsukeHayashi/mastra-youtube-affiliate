@@ -22,6 +22,7 @@
     "@mastra/libsql": "^0.12.0",
     "@mastra/loggers": "^0.10.5",
     "@mastra/memory": "^0.12.0",
+    "dotenv": "^17.2.1",
     "google-auth-library": "^10.2.0",
     "googleapis": "^154.1.0",
     "zod": "^3.25.76"

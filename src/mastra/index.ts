@@ -2,6 +2,10 @@
 import { Mastra } from '@mastra/core/mastra';
 import { PinoLogger } from '@mastra/loggers';
 import { LibSQLStore } from '@mastra/libsql';
+import dotenv from 'dotenv';
+
+// Load environment variables
+dotenv.config();
 import { weatherWorkflow } from './workflows/weather-workflow';
 import { affiliateWorkflow } from './workflows/affiliate-workflow';
 import { marketResearchWorkflow } from './workflows/market-research-workflow';
