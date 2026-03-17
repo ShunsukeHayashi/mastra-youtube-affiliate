@@ -1,3 +1,5 @@
+[![Built by 合同会社みやび](https://img.shields.io/badge/Built%20by-合同会社みやび-blue?style=flat-square&logo=github)](https://miyabi-ai.jp)
+
 # Mastra Multi-Agent Platform
 
 AIエージェントとワークフローを活用した統合プラットフォーム。アフィリエイトマーケティング、YouTube運用、天気情報などの多様な機能を提供します。
